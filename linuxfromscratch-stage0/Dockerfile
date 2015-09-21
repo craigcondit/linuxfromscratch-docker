@@ -571,4 +571,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf util-linux-2.26.2
 
+# xz
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf xz-5.2.1.tar.xz && \
+	cd xz-5.2.1 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf xz-5.2.1
+
 CMD ["/bin/bash"]
