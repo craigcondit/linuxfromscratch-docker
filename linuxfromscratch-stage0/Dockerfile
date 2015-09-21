@@ -539,6 +539,20 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf tar-1.28
 
+# texinfo
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf texinfo-6.0.tar.xz && \
+	cd texinfo-6.0 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf texinfo-6.0
 
 CMD ["/bin/bash"]
 
