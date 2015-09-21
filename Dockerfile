@@ -347,4 +347,20 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf diffutils-3.3
 
+# file
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf file-5.24.tar.gz && \
+	cd file-5.24 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf file-5.24
+
 CMD ["/bin/bash"]
