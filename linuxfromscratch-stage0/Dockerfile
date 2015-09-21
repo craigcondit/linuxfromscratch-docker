@@ -506,5 +506,20 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf perl-5.22.0
 
+# sed
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf sed-4.2.2.tar.bz2 && \
+	cd sed-4.2.2 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf sed-4.2.2
+
 CMD ["/bin/bash"]
 
