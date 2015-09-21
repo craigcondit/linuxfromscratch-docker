@@ -250,4 +250,20 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf dejagnu-1.5.3
 
+# check
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf check-0.10.0.tar.gz && \
+	cd check-0.10.0 && \
+	PKG_CONFIG= ./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf check-0.10.0
+
 CMD ["/bin/bash"]
