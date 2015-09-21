@@ -197,4 +197,24 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf gcc-5.2.0 gcc-build
 
+# tcl-core
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+	cd $LFS/sources && \
+	tar xf tcl-core8.6.4-src.tar.gz && \
+	cd tcl8.6.4 && \
+	cd unix && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	TZ=UTC make test && \
+	make install && \
+	chmod -v u+w /tools/lib/libtcl8.6.so && \
+	make install-private-headers && \
+	ln -sv tclsh8.6 /tools/bin/tclsh && \
+	cd $LFS/sources && \
+	rm -rf tcl8.6.4
+
 CMD ["/bin/bash"]
