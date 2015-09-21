@@ -47,7 +47,7 @@ RUN \
 	mv -v gmp-6.0.0 gmp && \
 	tar xf ../mpc-1.0.3.tar.gz && \
 	mv -v mpc-1.0.3 mpc && \
-	source /scripts/gcc-pass1-fix-paths.sh && \
+	bash /scripts/gcc-pass1-fix-paths.sh && \
 	mkdir -p ../gcc-build && \
 	cd ../gcc-build && \
 	../gcc-5.2.0/configure \
