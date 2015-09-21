@@ -284,4 +284,21 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf ncurses-6.0
 
+# bash
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf bash-4.3.30.tar.gz && \
+	cd bash-4.3.30 && \
+	./configure --prefix=/tools --without-bash-malloc && \
+	MAKE="make -j4" make && \
+	make tests && \
+	make install && \
+	ln -sv bash /tools/bin/sh && \
+	cd $LFS/sources && \
+	rm -rf bash-4.3.30
+
 CMD ["/bin/bash"]
