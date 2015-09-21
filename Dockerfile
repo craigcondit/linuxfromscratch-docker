@@ -78,4 +78,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf gcc-5.2.0 gcc-build
 
+# linux headers
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf linux-4.1.6.tar.xz && \
+	cd linux-4.1.6 && \
+	make mrproper && \
+	make INSTALL_HDR_PATH=dest headers_install && \
+	cp -rv dest/include/* /tools/include && \
+	cd $LFS/sources && \
+	rm -rf linux-4.1.6
+
 CMD ["/bin/bash"]
