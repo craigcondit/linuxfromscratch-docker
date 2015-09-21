@@ -119,4 +119,24 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf glibc-2.22
 
+# libstdc++
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf gcc-5.2.0.tar.bz2 && \
+        cd gcc-5.2.0 && \
+	mkdir -p ../gcc-build && \
+	cd ../gcc-build && \
+	../gcc-5.2.0/libstdc++-v3/configure \
+		--host=$LFS_TGT --prefix=/tools --disable-multilib --disable-nls \
+		--disable-libstdcxx-threads --disable-libstdcxx-pch \
+		--with-gxx-include-dir=/tools/$LFS_TGT/include/c++/5.2.0 && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf gcc-5.2.0
+
 CMD ["/bin/bash"]
