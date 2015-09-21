@@ -444,4 +444,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf gzip-1.6
 
+# m4
+RUN \
+	umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf m4-1.4.17.tar.xz && \
+	cd m4-1.4.17 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf m4-1.4.17
+
 CMD ["/bin/bash"]
