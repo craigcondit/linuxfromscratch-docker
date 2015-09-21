@@ -608,4 +608,6 @@ RUN \
 	rm -rf /mnt/lfs && \
 	rm -rf /bin /boot /etc /home /lib /lib64 /media /mnt /opt /root /sbin /srv /tmp /usr /var || //tools/bin/true
 
+ENV PATH=/tools/bin:/bin:/sbin:/usr/bin:/usr/sbin
+
 CMD ["/tools/bin/bash"]
