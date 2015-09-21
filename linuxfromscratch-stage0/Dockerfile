@@ -489,4 +489,22 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf patch-2.7.5
 
+# perl
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf perl-5.22.0.tar.bz2 && \
+	cd perl-5.22.0 && \
+	sh Configure -des -Dprefix=/tools -Dlibs=-lm && \
+	MAKE="make -j4" make && \
+	cp -v perl cpan/podlators/pod2man /tools/bin && \
+	mkdir -pv /tools/lib/perl5/5.22.0 && \
+	cp -Rv lib/* /tools/lib/perl5/5.22.0 && \
+	cd $LFS/sources && \
+	rm -rf perl-5.22.0
+
 CMD ["/bin/bash"]
+
