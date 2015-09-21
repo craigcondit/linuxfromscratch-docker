@@ -414,4 +414,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf gettext-0.19.5.1
 
+# grep
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf grep-2.21.tar.xz && \
+	cd grep-2.21 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf grep-2.21
+
 CMD ["/bin/bash"]
