@@ -5,6 +5,7 @@ ADD	scripts /scripts/
 
 ENV	LFS=/mnt/lfs LFS_VERSION=20150825-systemd
 
+# download all components
 RUN \
 	echo "deb http://ftp.us.debian.org/debian/ jessie main" > /etc/apt/sources.list && \
 	echo "deb http://security.debian.org/ jessie/updates main" >> /etc/apt/sources.list && \
@@ -25,7 +26,14 @@ RUN \
 	wget http://www.linuxfromscratch.org/lfs/view/${LFS_VERSION}/wget-list && \
 	wget http://www.linuxfromscratch.org/lfs/view/${LFS_VERSION}/md5sums && \
         aria2c -i $LFS/sources/wget-list -d $LFS/sources --check-certificate=false && \
-	md5sum -c md5sums && \
+	md5sum -c md5sums
+
+# binutils pass 1
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
 	cd $LFS/sources && \
 	tar xf binutils-2.25.1.tar.bz2 && \
 	cd binutils-2.25.1 && \
@@ -38,6 +46,15 @@ RUN \
 	mkdir -v /tools/lib && \
 	ln -sv lib /tools/lib64 && \
 	make install && \
+	cd $LFS/sources && \
+	rm -rf binutils-2.25.1 binutils-build
+
+# gcc pass 1
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
 	cd $LFS/sources && \
 	tar xf gcc-5.2.0.tar.bz2 && \
 	cd gcc-5.2.0 && \
@@ -58,7 +75,7 @@ RUN \
 		--disable-libgomp --disable-libquadmath --disable-libssp --disable-libvtv \
 		--disable-libstdcxx --enable-languages=c,c++ && \
 	MAKE="make -j4" make && make install && \
-	cd $LFS/sources
-	
+	cd $LFS/sources && \
+	rm -rf gcc-5.2.0 gcc-build
 
 CMD ["/bin/bash"]
