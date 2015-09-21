@@ -363,4 +363,20 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf file-5.24
 
+# findutils
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf findutils-4.4.2.tar.gz && \
+	cd findutils-4.4.2 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf findutils-4.4.2
+
 CMD ["/bin/bash"]
