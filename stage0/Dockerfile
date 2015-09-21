@@ -42,7 +42,7 @@ RUN \
 	cd ../binutils-build && \
 	../binutils-2.25.1/configure \
 		--prefix=/tools --with-sysroot=/mnt/lfs --with-lib-path=/tools/lib \
-		--target=/mnt/lfs_TGT --disable-nls --disable-werror && \
+		--target=$LFS_TFT --disable-nls --disable-werror && \
 	MAKE="make -j4" make && \
 	mkdir -v /tools/lib && \
 	ln -sv lib /tools/lib64 && \
@@ -70,7 +70,7 @@ RUN \
 	mkdir -p ../gcc-build && \
 	cd ../gcc-build && \
 	../gcc-5.2.0/configure \
-		--target=/mnt/lfs_TGT --prefix=/tools --with-glibc-version=2.11 --with-sysroot=/mnt/lfs \
+		--target=$LFS_TFT --prefix=/tools --with-glibc-version=2.11 --with-sysroot=/mnt/lfs \
 		--with-newlib --without-headers --with-local-prefix=/tools \
 		--with-native-system-header-dir=/tools/include --disable-nls --disable-shared \
 		--disable-multilib --disable-decimal-float --disable-threads --disable-libatomic \
@@ -108,14 +108,14 @@ RUN \
 	mkdir -p ../glibc-build && \
 	cd ../glibc-build && \
 	../glibc-2.22/configure \
-		--prefix=/tools --host=/mnt/lfs_TGT --build=$(../glibc-2.22/scripts/config.guess) \
+		--prefix=/tools --host=$LFS_TFT --build=$(../glibc-2.22/scripts/config.guess) \
 		--disable-profile --enable-kernel=2.6.32 --enable-obsolete-rpc \
 		--with-headers=/tools/include libc_cv_forced_unwind=yes \
 		libc_cv_ctors_header=yes libc_cv_c_cleanup=yes && \
 	MAKE="make -j4" make && \
 	make install && \
 	echo 'main(){}' > dummy.c && \
-	/mnt/lfs_TGT-gcc dummy.c && \
+	$LFS_TFT-gcc dummy.c && \
 	readelf -l a.out | grep ': /tools' && \
 	rm -v dummy.c a.out && \
 	cd /mnt/lfs/sources && \
@@ -133,9 +133,9 @@ RUN \
 	mkdir -p ../gcc-build && \
 	cd ../gcc-build && \
 	../gcc-5.2.0/libstdc++-v3/configure \
-		--host=/mnt/lfs_TGT --prefix=/tools --disable-multilib --disable-nls \
+		--host=$LFS_TFT --prefix=/tools --disable-multilib --disable-nls \
 		--disable-libstdcxx-threads --disable-libstdcxx-pch \
-		--with-gxx-include-dir=/tools//mnt/lfs_TGT/include/c++/5.2.0 && \
+		--with-gxx-include-dir=/tools/$LFS_TFT/include/c++/5.2.0 && \
 	MAKE="make -j4" make && \
 	make install && \
 	cd /mnt/lfs/sources && \
@@ -152,7 +152,7 @@ RUN \
 	cd binutils-2.25.1 && \
 	mkdir -p ../binutils-build && \
 	cd ../binutils-build && \
-	CC=/mnt/lfs_TGT-gcc AR=/mnt/lfs_TGT-ar RANLIB=/mnt/lfs_TGT-ranlib \
+	CC=$LFS_TFT-gcc AR=$LFS_TFT-ar RANLIB=$LFS_TFT-ranlib \
 	../binutils-2.25.1/configure \
 		--prefix=/tools --disable-nls --disable-werror \
 		--with-lib-path=/tools/lib --with-sysroot && \
@@ -185,7 +185,7 @@ RUN \
 	bash /mnt/lfs/sources/gcc-fix-paths.sh && \
 	mkdir -p ../gcc-build && \
 	cd ../gcc-build && \
-	CC=/mnt/lfs_TGT-gcc CXX=/mnt/lfs_TGT-g++ AR=/mnt/lfs_TGT-ar RANLIB=/mnt/lfs_TGT-ranlib \
+	CC=$LFS_TFT-gcc CXX=$LFS_TFT-g++ AR=$LFS_TFT-ar RANLIB=$LFS_TFT-ranlib \
 	../gcc-5.2.0/configure \
 		--prefix=/tools --with-local-prefix=/tools \
 		--with-native-system-header-dir=/tools/include --enable-languages=c,c++ \
