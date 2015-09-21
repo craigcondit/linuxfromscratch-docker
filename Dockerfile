@@ -394,4 +394,24 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf gawk-4.1.3
 
+# gettext
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf gettext-0.19.5.1.tar.xz && \
+	cd gettext-0.19.5.1 && \
+	cd gettext-tools && \
+	EMACS="no" ./configure --prefix=/tools --disable-shared && \
+	MAKE="make -j4" make -C gnulib-lib && \
+	MAKE="make -j4" make -C intl pluralx.c && \
+	MAKE="make -j4" make -C src msgfmt && \
+	MAKE="make -j4" make -C src msgmerge && \
+	MAKE="make -j4" make -C src xgettext && \
+	cp -f src/msgfmt src/msgmerge src/xgettext /tools/bin && \
+	cd $LFS/sources && \
+	rm -rf gettext-0.19.5.1
+
 CMD ["/bin/bash"]
