@@ -554,5 +554,21 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf texinfo-6.0
 
-CMD ["/bin/bash"]
+# util-linux
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf util-linux-2.26.2.tar.xz && \
+	cd util-linux-2.26.2 && \
+	./configure \
+		--prefix=/tools --without-python --disable-makeinstall-chown \
+		 --without-systemdsystemunitdir PKG_CONFIG="" && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf util-linux-2.26.2
 
+CMD ["/bin/bash"]
