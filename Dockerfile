@@ -379,4 +379,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf findutils-4.4.2
 
+# gawk
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf gawk-4.1.3.tar.xz && \
+	cd gawk-4.1.3 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf gawk-4.1.3
+
 CMD ["/bin/bash"]
