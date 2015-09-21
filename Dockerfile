@@ -315,4 +315,20 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf bzip2-1.0.6
 
+# coreutils 
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf coreutils-8.24.tar.xz && \
+	cd coreutils-8.24 && \
+	FORCE_UNSAFE_CONFIGURE=1 ./configure \
+		--prefix=/tools --enable-install-program=hostname && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf coreutils-8.24
+
 CMD ["/bin/bash"]
