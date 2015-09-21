@@ -474,4 +474,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf make-4.1
 
+# patch
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf patch-2.7.5.tar.xz && \
+	cd patch-2.7.5 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf patch-2.7.5
+
 CMD ["/bin/bash"]
