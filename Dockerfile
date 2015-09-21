@@ -301,4 +301,18 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf bash-4.3.30
 
+# bzip2
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf bzip2-1.0.6.tar.gz && \
+	cd bzip2-1.0.6 && \
+	MAKE="make -j4" make && \
+	make PREFIX=/tools install && \
+	cd $LFS/sources && \
+	rm -rf bzip2-1.0.6
+
 CMD ["/bin/bash"]
