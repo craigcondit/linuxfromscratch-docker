@@ -266,4 +266,22 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf check-0.10.0
 
+# ncurses
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf ncurses-6.0.tar.gz && \
+	cd ncurses-6.0 && \
+	sed -i s/mawk// configure && \
+	./configure \
+		--prefix=/tools --with-shared --without-debug --without-ada \
+		--enable-widec --enable-overwrite && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf ncurses-6.0
+
 CMD ["/bin/bash"]
