@@ -11,6 +11,6 @@ echo "Starting temporary container for export..."
 docker run --name=linuxfromscratch-stage0-tmp ccondit/linuxfromscratch-stage0
 
 echo "Exporting filesystem..."
-docker export linuxfromscratch-stage0-tmp | gzip -c > linuxfromscratch-stage0.tar.gz
+docker export linuxfromscratch-stage0-tmp | gzip -c > ../linuxfromscratch-stage0.tar.gz
 
 echo "Stage0 generated."
