@@ -217,4 +217,37 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf tcl8.6.4
 
+# expect
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+	cd $LFS/sources && \
+	tar xf expect5.45.tar.gz && \
+	cd expect5.45 && \
+	cp -fv configure configure.orig && \
+	sed 's:/usr/local/bin:/bin:' configure.orig > configure && \
+	./configure --prefix=/tools --with-tcl=/tools/lib --with-tclinclude=/tools/include && \
+	MAKE="make -j4" make && \
+	make test && \
+	make SCRIPTS="" install && \
+	cd $LFS/sources && \
+	rm -rf expect5.45
+
+# dejagnu
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf dejagnu-1.5.3.tar.gz && \
+	cd dejagnu-1.5.3 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make install && \
+	make check && \
+	cd $LFS/sources && \
+	rm -rf dejagnu-1.5.3
+
 CMD ["/bin/bash"]
