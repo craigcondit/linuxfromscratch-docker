@@ -213,7 +213,6 @@ RUN \
 	cd unix && \
 	./configure --prefix=/tools && \
 	MAKE="make -j4" make && \
-	TZ=UTC make test && \
 	make install && \
 	chmod -v u+w /tools/lib/libtcl8.6.so && \
 	make install-private-headers && \
@@ -234,7 +233,6 @@ RUN \
 	sed 's:/usr/local/bin:/bin:' configure.orig > configure && \
 	./configure --prefix=/tools --with-tcl=/tools/lib --with-tclinclude=/tools/include && \
 	MAKE="make -j4" make && \
-	make test && \
 	make SCRIPTS="" install && \
 	cd /mnt/lfs/sources && \
 	rm -rf expect5.45
@@ -250,7 +248,6 @@ RUN \
 	cd dejagnu-1.5.3 && \
 	./configure --prefix=/tools && \
 	MAKE="make -j4" make install && \
-	make check && \
 	cd /mnt/lfs/sources && \
 	rm -rf dejagnu-1.5.3
 
@@ -299,7 +296,6 @@ RUN \
 	cd bash-4.3.30 && \
 	./configure --prefix=/tools --without-bash-malloc && \
 	MAKE="make -j4" make && \
-	make tests && \
 	make install && \
 	ln -sv bash /tools/bin/sh && \
 	cd /mnt/lfs/sources && \
@@ -346,7 +342,6 @@ RUN \
 	cd diffutils-3.3 && \
 	./configure --prefix=/tools && \
 	MAKE="make -j4" make && \
-	make check && \
 	make install && \
 	cd /mnt/lfs/sources && \
 	rm -rf diffutils-3.3
@@ -362,7 +357,6 @@ RUN \
 	cd file-5.24 && \
 	./configure --prefix=/tools && \
 	MAKE="make -j4" make && \
-	make check && \
 	make install && \
 	cd /mnt/lfs/sources && \
 	rm -rf file-5.24
@@ -378,7 +372,6 @@ RUN \
 	cd findutils-4.4.2 && \
 	./configure --prefix=/tools && \
 	MAKE="make -j4" make && \
-	make check && \
 	make install && \
 	cd /mnt/lfs/sources && \
 	rm -rf findutils-4.4.2
