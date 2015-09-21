@@ -429,4 +429,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf grep-2.21
 
+# gzip
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf gzip-1.6.tar.xz && \
+	cd gzip-1.6 && \
+	./configure --prefix=/tools && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf gzip-1.6
+
 CMD ["/bin/bash"]
