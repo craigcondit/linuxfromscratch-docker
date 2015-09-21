@@ -93,4 +93,30 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf linux-4.1.6
 
+# glibc
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf glibc-2.22.tar.xz && \
+	cd glibc-2.22 && \
+	patch -Np1 -i ../glibc-2.22-upstream_i386_fix-1.patch && \
+	mkdir -p ../glibc-build && \
+	cd ../glibc-build && \
+	../glibc-2.22/configure \
+		--prefix=/tools --host=$LFS_TGT --build=$(../glibc-2.22/scripts/config.guess) \
+		--disable-profile --enable-kernel=2.6.32 --enable-obsolete-rpc \
+		--with-headers=/tools/include libc_cv_forced_unwind=yes \
+		libc_cv_ctors_header=yes libc_cv_c_cleanup=yes && \
+	MAKE="make -j4" make && \
+	make install && \
+	echo 'main(){}' > dummy.c && \
+	$LFS_TGT-gcc dummy.c && \
+	readelf -l a.out | grep ': /tools' && \
+	rm -v dummy.c a.out && \
+	cd $LFS/sources && \
+	rm -rf glibc-2.22
+
 CMD ["/bin/bash"]
