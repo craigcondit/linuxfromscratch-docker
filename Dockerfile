@@ -459,4 +459,19 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf m4-1.4.17
 
+# make
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+	tar xf make-4.1.tar.bz2 && \
+	cd make-4.1 && \
+	./configure --prefix=/tools --without-guile && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf make-4.1
+
 CMD ["/bin/bash"]
