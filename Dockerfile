@@ -139,4 +139,62 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf gcc-5.2.0
 
+# binutils pass 2
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+	cd $LFS/sources && \
+	tar xf binutils-2.25.1.tar.bz2 && \
+	cd binutils-2.25.1 && \
+	mkdir -p ../binutils-build && \
+	cd ../binutils-build && \
+	CC=$LFS_TGT-gcc AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib \
+	../binutils-2.25.1/configure \
+		--prefix=/tools --disable-nls --disable-werror \
+		--with-lib-path=/tools/lib --with-sysroot && \
+	MAKE="make -j4" make && \
+	make install && \
+	make -C ld clean && \
+	MAKE="make -j4" make -C ld LIB_PATH=/usr/lib:/lib && \
+	cp -v ld/ld-new /tools/bin && \
+	cd $LFS/sources && \
+	rm -rf binutils-2.25.1 binutils-build
+
+# gcc pass 2
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+	cd $LFS/sources && \
+	tar xf gcc-5.2.0.tar.bz2 && \
+	cd gcc-5.2.0 && \
+	tar xf ../mpfr-3.1.3.tar.xz && \
+	mv -v mpfr-3.1.3 mpfr && \
+	tar xf ../gmp-6.0.0a.tar.xz && \
+	mv -v gmp-6.0.0 gmp && \
+	tar xf ../mpc-1.0.3.tar.gz && \
+	mv -v mpc-1.0.3 mpc && \
+	bash /scripts/gcc-pass2-make-limits-h.sh && \
+	bash /scripts/gcc-pass2-fix-paths.sh && \
+	mkdir -p ../gcc-build && \
+	cd ../gcc-build && \
+	CC=$LFS_TGT-gcc CXX=$LFS_TGT-g++ AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib \
+	../gcc-5.2.0/configure \
+		--prefix=/tools --with-local-prefix=/tools \
+		--with-native-system-header-dir=/tools/include --enable-languages=c,c++ \
+		--disable-libstdcxx-pch --disable-multilib --disable-bootstrap \
+		--disable-libgomp && \
+	MAKE="make -j4" make && \
+	make install && \
+	ln -sv gcc /tools/bin/cc && \
+	echo 'main(){}' > dummy.c && \
+	cc dummy.c && \
+	readelf -l a.out | grep ': /tools' && \
+	rm -v dummy.c a.out && \
+	cd $LFS/sources && \
+	rm -rf gcc-5.2.0 gcc-build
+
 CMD ["/bin/bash"]
