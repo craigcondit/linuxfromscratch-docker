@@ -521,5 +521,24 @@ RUN \
 	cd $LFS/sources && \
 	rm -rf sed-4.2.2
 
+# tar
+ADD patches/tar-1.28-inode-fix.patch /mnt/lfs/sources/tar-1.28-inode-fix.patch
+
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
+        export PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin && \
+        cd $LFS/sources && \
+        tar xf tar-1.28.tar.xz && \
+	cd tar-1.28 && \
+	patch -p1 < ../tar-1.28-inode-fix.patch && \
+	FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/tools && \
+	make && \
+	make install && \
+	cd $LFS/sources && \
+	rm -rf tar-1.28
+
+
 CMD ["/bin/bash"]
 
