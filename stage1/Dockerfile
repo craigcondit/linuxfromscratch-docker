@@ -1078,11 +1078,55 @@ RUN \
 	patch -p1 < ../tar-1.28-inode-fix.patch && \
 	FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr --bindir=/bin && \
 	MAKE="make -j4" make && \
-	make check && \
 	make install && \
 	make -C doc install-html docdir=/usr/share/doc/tar-1.28 && \
 	cd /sources && \
 	rm -rf tar-1.28
+
+# texinfo
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf texinfo-6.0.tar.xz && \
+	cd texinfo-6.0 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	make TEXMF=/usr/share/texmf install-tex && \
+	cd /usr/share/info && \
+	rm -v dir && \
+	for f in * ; do install-info $f dir 2>/dev/null ; done && \
+	cd /sources && \
+	rm -rf texinfo-6.0
+
+# vim
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf vim-7.4.tar.bz2 && \
+	cd vim74 && \
+	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	ln -sv vim /usr/bin/vi && \
+	for L in /usr/share/man/{,*/}man1/vim.1; do ln -sv vim.1 $(dirname $L)/vi.1 ; done && \
+	ln -sv ../vim/vim74/doc /usr/share/doc/vim-7.4 && \
+	echo '" Begin /etc/vimrc' > /etc/vimrc && \
+	echo '' >> /etc/vimrc && \
+	echo 'set nocompatible' >> /etc/vimrc && \
+	echo 'set backspace=2' >> /etc/vimrc && \
+	echo 'syntax on' >> /etc/vimrc && \
+	echo 'if (&term == "iterm") || (&term == "putty")' >> /etc/vimrc && \
+	echo '  set background=dark' >> /etc/vimrc && \
+	echo 'endif' >> /etc/vimrc && \
+	echo '' >> /etc/vimrc && \
+	echo '" End /etc/vimrc' >> /etc/vimrc && \
+	cd /sources && \
+	rm -rf vim74
 
 CMD ["/bin/bash"]
 
