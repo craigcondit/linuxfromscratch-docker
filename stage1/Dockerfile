@@ -191,4 +191,20 @@ RUN \
 	cd /sources && \
 	rm -rf file-5.24
 
+# binutils
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf binutils-2.25.1.tar.bz2 && \
+	cd binutils-2.25.1 && \
+	mkdir -pv ../binutils-build && \
+	cd ../binutils-build && \
+	../binutils-2.25.1/configure --prefix=/usr --enable-shared --disable-werror && \
+	MAKE="make -j4" make tooldir=/usr && \
+	make check && \
+	make tooldir=/usr install && \
+	cd /sources && \
+	rm -rf binuitls-2.25.1 binutils-build
+
 CMD ["/bin/bash"]
