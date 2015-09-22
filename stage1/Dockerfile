@@ -273,9 +273,6 @@ RUN \
 		--prefix=/usr --enable-languages=c,c++ --disable-multilib \
 		--disable-bootstrap --with-system-zlib && \
 	MAKE="make -j4" make && \
-	ulimit -s 32768 && \
-	make -k check && \
-	../gcc-5.2.0/contrib/test_summary | grep -A7 Summ && \
 	make install && \
 	ln -sv ../usr/bin/cpp /lib && \
 	ln -sv gcc /usr/bin/cc && \
