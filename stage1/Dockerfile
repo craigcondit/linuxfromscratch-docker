@@ -225,4 +225,23 @@ RUN \
 	cd /sources && \
 	rm -rf gmp-6.0.0
 
+# mpfr
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf mpfr-3.1.3.tar.xz && \
+	cd mpfr-3.1.3 && \
+	patch -Np1 -i ../mpfr-3.1.3-upstream_fixes-1.patch && \
+	./configure \
+		--prefix=/usr --disable-static --enable-thread-safe \
+		--docdir=/usr/share/doc/mpfr-3.1.3 && \
+	MAKE="make -j4" make && \
+	make html && \
+	make check && \
+	make install && \
+	make install-html && \
+	cd /sources && \
+	rm -rf mpfr-3.1.3
+
 CMD ["/bin/bash"]
