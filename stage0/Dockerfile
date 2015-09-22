@@ -600,8 +600,10 @@ RUN \
 	mv /mnt/lfs/sources /sources && \
 	rm -rf /mnt/lfs && \
 	rm -rf /bin /boot /etc /home /lib /lib64 /media /mnt /opt /root /sbin /srv /tmp /usr /var || //tools/bin/true && \
-	/tools/bin/mkdir /root
+	/tools/bin/mkdir -pv /bin /root && \
+	/tools/bin/ln -sv /tools/bin/bash /bin && \
+	/tools/bin/ln -sv bash /bin/sh && \
 
 ENV PATH=/bin:/sbin:/usr/bin:/usr/sbin:/tools/bin:/tools/sbin
 
-CMD ["/tools/bin/bash"]
+CMD ["/bin/sh"]

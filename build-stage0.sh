@@ -20,8 +20,8 @@ docker rmi ccondit/linuxfromscratch-stage0-build
 
 echo "Loading squashed stage0..."
 docker import \
-	--change 'ENV PATH /bin:/sbin:/usr/bin:/usr/sbin:/tools/bin:/tools.sbin' \
-	--change 'CMD ["/tools/bin/bash"]' \
+	--change 'ENV PATH /bin:/sbin:/usr/bin:/usr/sbin:/tools/bin:/tools/sbin' \
+	--change 'CMD ["/bin/sh"]' \
 	../linuxfromscratch-stage0.tar.gz ccondit/linuxfromscratch-stage0
 
 echo "Stage0 generated."
