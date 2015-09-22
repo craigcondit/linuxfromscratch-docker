@@ -244,4 +244,20 @@ RUN \
 	cd /sources && \
 	rm -rf mpfr-3.1.3
 
+# mpc
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf mpc-1.0.3.tar.gz && \
+	cd mpc-1.0.3 && \
+	./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/mpc-1.0.3 && \
+	MAKE="make -j4" make && \
+	make html && \
+	make check && \
+	make install && \
+	make install-html && \
+	cd /sources && \
+	rm -rf mpc-1.0.3
+
 CMD ["/bin/bash"]
