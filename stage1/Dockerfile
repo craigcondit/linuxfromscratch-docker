@@ -3,7 +3,10 @@ MAINTAINER ccondit@randomcoder.com
 
 ENV	LFS_VERSION=20150825-systemd
 
-# initial setup ; create dirs
+# initial setup ; create base filesystem assets
+ADD assets/etc/passwd /etc/passwd
+ADD assets/etc/group /etc/group
+
 RUN \
         umask 022 && \
 	mkdir -pv /bin /boot /etc/opt /etc/sysconfig /home /lib/firmware /mnt /opt && \
@@ -41,6 +44,12 @@ RUN \
 	ln -sfv /tools/lib/libstdc++.so /usr/lib && \
 	ln -sfv /tools/lib/libstdc++.so.6 /usr/lib && \
 	sed 's/tools/usr/' /tools/lib/libstdc++.la > /usr/lib/libstdc++.la && \
-	ln -sfv bash /bin/sh
+	ln -sfv bash /bin/sh && \
+	ln -sfv /proc/self/mounts /etc/mtab && \
+	chmod 644 /etc/passwd /etc/group && \
+	touch /var/log/btmp /var/log/lastlog /var/log/wtmp && \
+	chgrp -v utmp /var/log/lastlog && \
+	chmod -v 664 /var/log/lastlog && \
+	chmod -v 600 /var/log/btmp
 
 CMD ["/bin/bash"]
