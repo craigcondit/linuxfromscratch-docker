@@ -727,5 +727,21 @@ RUN \
 	cd /sources && \
 	rm -rf inetutils-1.9.4
 
+# perl
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf perl-5.22.0.tar.bz2 && \
+	cd perl-5.22.0 && \
+	BUILD_ZLIB=False BUILD_BZIP2=0 sh Configure \
+		-des -Dprefix=/usr -Dvendorprefix=/usr -Dman1dir=/usr/share/man/man1 \
+		-Dman3dir=/usr/share/man/man3 -Dpager="/usr/bin/less -isR" -Duseshrplib && \
+	BUILD_ZLIB=False BUILD_BZIP2=0 MAKE="make -j4" make && \
+	BUILD_ZLIB=False BUILD_BZIP2=0 make -k test && \
+	BUILD_ZLIB=False BUILD_BZIP2=0 make install && \
+	cd /sources && \
+	rm -rf perl-5.22.0
+
 CMD ["/bin/bash"]
 
