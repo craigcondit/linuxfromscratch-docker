@@ -6,8 +6,6 @@ ENV	LFS_VERSION=20150825-systemd
 # initial setup ; create dirs
 RUN \
         umask 022 && \
-        export LC_ALL=POSIX && \
-        export LFS_TGT=$(uname -m)-lfs-linux-gnu && \
 	mkdir -pv /bin /boot /etc/opt /etc/sysconfig /home /lib/firmware /mnt /opt && \
 	mkdir -pv /media/floppy /media/cdrom /sbin /srv /var && \
 	install -dv -m 0750 /root && \
@@ -25,24 +23,24 @@ RUN \
 	mkdir -pv /usr/libexec && \
 	for dir in 1 2 3 4 5 6 7 8 ; do mkdir -p /usr/share/man/man1 ; done && \
 	for dir in 1 2 3 4 5 6 7 8 ; do mkdir -p /usr/local/share/man/man1 ; done && \
-	ln -sv lib /lib64 && \
-	ln -sv lib /usr/lib64 && \
-	ln -sv lib /usr/local/lib64 && \
+	ln -sfv lib /lib64 && \
+	ln -sfv lib /usr/lib64 && \
+	ln -sfv lib /usr/local/lib64 && \
 	mkdir -pv /var/log /var/mail /var/spool && \
-	ln -sv /run /var/run && \
-	ln -sv /run/lock /var/lock && \
+	ln -sfv /run /var/run && \
+	ln -sfv /run/lock /var/lock && \
 	mkdir -pv /var/opt /var/cache /var/lib/color /var/lib/misc /var/lib/locate /var/local && \
-	ln -sv /tools/bin/bash /bin && \
-	ln -sv /tools/cat /bin && \
-	ln -sv /tools/echo /bin && \
-	ln -sv /tools/pwd /bin && \
-	ln -sv /tools/stty /bin && \
-	ln -sv /tools/bin/perl /usr/bin && \
-	ln -sv /tools/lib/libgcc_s.so /usr/lib && \
-	ln -sv /tools/lib/libgcc_s.so.1 /usr/lib && \
-	ln -sv /tools/lib/libstdc++.so /usr/lib && \
-	ln -sv /tools/lib/libstdc++.so.6 /usr/lib && \
+	ln -sfv /tools/bin/bash /bin && \
+	ln -sfv /tools/cat /bin && \
+	ln -sfv /tools/echo /bin && \
+	ln -sfv /tools/pwd /bin && \
+	ln -sfv /tools/stty /bin && \
+	ln -sfv /tools/bin/perl /usr/bin && \
+	ln -sfv /tools/lib/libgcc_s.so /usr/lib && \
+	ln -sfv /tools/lib/libgcc_s.so.1 /usr/lib && \
+	ln -sfv /tools/lib/libstdc++.so /usr/lib && \
+	ln -sfv /tools/lib/libstdc++.so.6 /usr/lib && \
 	sed 's/tools/usr/' /tools/lib/libstdc++.la > /usr/lib/libstdc++.la && \
-	ln -sv bash /bin/sh
+	ln -sfv bash /bin/sh
 
-CMD ["/tools/bin/bash"]
+CMD ["/bin/bash"]
