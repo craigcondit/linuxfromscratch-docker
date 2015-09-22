@@ -770,5 +770,19 @@ RUN \
 	cd /sources && \
 	rm -rf autoconf-2.69
 
+# automake
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf automake-1.15.tar.xz && \
+	cd automake-1.15 && \
+	sed -i 's:/\\\${:/\\\$\\{:' bin/automake.in && \
+	./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.15 && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf automake-1.15
+
 CMD ["/bin/bash"]
 
