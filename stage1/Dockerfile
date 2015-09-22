@@ -432,4 +432,26 @@ RUN \
 	cd /sources && \
 	rm -rf sed-4.2.2
 
+# shadow
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf shadow-4.2.1.tar.xz && \
+	cd shadow-4.2.1 && \
+	sed -i 's/groups$(EXEEXT) //' src/Makefile.in && \
+	find man -name Makefile.in -exec sed -i 's/groups\.1 / /' {} \; && \
+	sed -i -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' \
+		-e 's@/var/spool/mail@/var/mail@' etc/login.defs && \
+	sed -i 's/1000/999/' etc/useradd && \
+	./configure --sysconfdir=/etc --with-group-name-max-length=32 && \
+	MAKE="make -j4" make && \
+	make install && \
+	mv -v /usr/bin/passwd /bin && \
+	pwconv && \
+	grpconv && \
+	sed -i 's/yes/no/' /etc/default/useradd && \
+	cd /sources && \
+	rm -rf shadow-4.2.1
+
 CMD ["/bin/bash"]
