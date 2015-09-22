@@ -784,5 +784,20 @@ RUN \
 	cd /sources && \
 	rm -rf automake-1.15
 
+# diffutils
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf diffutils-3.3.tar.xz && \
+	cd diffutils-3.3 && \
+	sed -i 's:= @mkdir_p@:= /bin/mkdir -p:' po/Makefile.in.in && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf diffutils-3.3
+
 CMD ["/bin/bash"]
 
