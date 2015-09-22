@@ -650,6 +650,21 @@ RUN \
 	make install && \
 	cd /sources && \
 	rm -rf bash-4.3.30
+# bc
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf bc-1.06.95.tar.bz2 && \
+	cd bc-1.06.95 && \
+	patch -Np1 -i ../bc-1.06.95-memory_leak-1.patch && \
+	./configure \
+		--prefix=/usr --with-readline --mandir=/usr/share/man --infodir=/usr/share/info && \
+	MAKE="make -j4" make && \
+	echo "quit" | ./bc/bc -l Test/checklib.b && \
+	make install && \
+	cd /sources && \
+	rm -rf bc-1.06.95
 
 CMD ["/bin/bash"]
 
