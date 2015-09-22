@@ -1031,5 +1031,23 @@ RUN \
 	cd /sources && \
 	rm -rf dbus-1.8.20
 
+# util-linux
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf util-linux-2.26.2.tar.xz && \
+	cd util-linux-2.26.2 && \
+	mkdir -pv /var/lib/hwclock && \
+	./configure \
+		ADJTIME_PATH=/var/lib/hwclock/adjtime \
+		--docdir=/usr/share/doc/util-linux-2.26.2 --disable-chfn-chsh \
+		--disable-login --disable-nologin --disable-su --disable-setpriv \
+		--disable-runuser --disable-pylibmount --disable-static --without-python && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf util-linux-2.26.2
+
 CMD ["/bin/bash"]
 
