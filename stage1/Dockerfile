@@ -416,4 +416,20 @@ RUN \
 	cd /sources && \
 	rm -rf libcap-2.24
 
+# sed
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf sed-4.2.2.tar.bz2 && \
+	cd sed-4.2.2 && \
+	./configure --prefix=/usr --bindir=/bin --htmldir=/usr/share/doc/sed-4.2.2 && \
+	MAKE="make -j4" make && \
+	make html && \
+	make check && \
+	make install && \
+	make -C doc install-html && \
+	cd /sources && \
+	rm -rf sed-4.2.2
+
 CMD ["/bin/bash"]
