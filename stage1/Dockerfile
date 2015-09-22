@@ -678,6 +678,20 @@ RUN \
 	make install && \
 	cd /sources && \
 	rm -rf libtool-2.4.6
-	
+
+# gdbm
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf gdbm-1.11.tar.gz && \
+	cd gdbm-1.11 && \
+	./configure --prefix=/usr --disable-static --enable-libgdbm-compat && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf gdbm-1.11
+
 CMD ["/bin/bash"]
 
