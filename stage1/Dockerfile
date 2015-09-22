@@ -903,5 +903,18 @@ RUN \
 	cd /sources && \
 	rm -rf xz-5.2.1
 
+# less
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf less-458.tar.gz && \
+	cd less-458 && \
+	./configure --prefix=/usr --sysconfdir=/etc && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf less-458
+
 CMD ["/bin/bash"]
 
