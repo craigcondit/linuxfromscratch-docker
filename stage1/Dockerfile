@@ -8,7 +8,7 @@ ADD assets/etc/passwd /etc/passwd
 ADD assets/etc/group /etc/group
 
 RUN \
-        umask 022 && \
+	umask 022 && \
 	mkdir -pv /bin /boot /etc/opt /etc/sysconfig /home /lib/firmware /mnt /opt && \
 	mkdir -pv /media/floppy /media/cdrom /sbin /srv /var && \
 	install -dv -m 0750 /root && \
@@ -51,5 +51,19 @@ RUN \
 	chgrp -v utmp /var/log/lastlog && \
 	chmod -v 664 /var/log/lastlog && \
 	chmod -v 600 /var/log/btmp
+
+# linux headers
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf linux-4.1.6.tar.xz && \
+	cd linux-4.1.6 && \
+	make mrproper && \
+	make INSTALL_HDR_PATH=dest headers_install && \
+	find dest/include \( -name .install -o -name ..install.cmd \) -delete && \
+	cp -rv dest/include/* /usr/include && \
+	cd /sources && \
+	rm -rf linux-4.1.6
 
 CMD ["/bin/bash"]
