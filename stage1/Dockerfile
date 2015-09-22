@@ -133,6 +133,32 @@ RUN \
 		zic -L leapseconds -d /usr/share/zoneinfo/right -y "sh yearistype.sh" ${tz} ; done && \
 	cp -v zone.tab zone1970.tab iso3166.tab /usr/share/zoneinfo && \
 	zic -d /usr/share/zoneinfo -p America/New_York && \
-	ln -sfv /usr/share/zoneinfo/UTC /etc/localtime
+	ln -sfv /usr/share/zoneinfo/UTC /etc/localtime && \
+	cd /sources && \
+	rm -rf glibc-2.22 glibc-build
+
+# toolchain
+
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	mv -v /tools/bin/ld /tools/bin/ld-old && \
+	mv -v /tools/$(gcc -dumpmachine)/bin/ld /tools/$(gcc -dumpmachine)/bin/ld-old && \
+	mv -v /tools/bin/ld-new /tools/bin/ld && \
+	ln -sv /tools/bin/ld /tools/$(gcc -dumpmachine)/bin/ld && \
+	gcc -dumpspecs | sed -e 's@/tools@@g' \
+		-e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
+		-e '/\*cpp:/{n;s@$@ -isystem /usr/include@}' >      \
+		`dirname $(gcc --print-libgcc-file-name)`/specs && \
+	echo 'main(){}' > dummy.c && \
+	cc dummy.c -v -Wl,--verbose &> dummy.log && \
+	readelf -l a.out | grep ': /lib' && \
+	grep -o '/usr/lib.*/crt[1in].*succeeded' dummy.log && \
+	grep -B1 '^ /usr/include' dummy.log && \
+	grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g' && \
+	grep "/lib.*/libc.so.6 " dummy.log && \
+	grep found dummy.log && \
+	rm -v dummy.c a.out dummy.log
 
 CMD ["/bin/bash"]
