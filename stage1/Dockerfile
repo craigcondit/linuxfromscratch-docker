@@ -599,5 +599,19 @@ RUN \
 	cd /sources && \
 	rm -rf bison-3.0.4
 
+# grep
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+	tar xf grep-2.21.tar.xz && \
+	cd grep-2.21 && \
+	sed -i -e '/tp++/a  if (ep <= tp) break;' src/kwset.c && \
+	./configure --prefix=/usr --bindir=/bin && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf grep-2.21
+
 CMD ["/bin/bash"]
 
