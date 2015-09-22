@@ -666,5 +666,18 @@ RUN \
 	cd /sources && \
 	rm -rf bc-1.06.95
 
+# libtool
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf libtool-2.4.6.tar.xz && \
+	cd libtool-2.4.6 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf libtool-2.4.6
+	
 CMD ["/bin/bash"]
 
