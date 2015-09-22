@@ -886,5 +886,22 @@ RUN \
 	cd /sources && \
 	rm -rf groff-1.22.3
 
+# xz
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf xz-5.2.1.tar.xz && \
+	cd xz-5.2.1 && \
+	./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/xz-5.2.1 && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	mv -v   /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin && \
+	mv -v /usr/lib/liblzma.so.* /lib && \
+	ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so && \
+	cd /sources && \
+	rm -rf xz-5.2.1
+
 CMD ["/bin/bash"]
 
