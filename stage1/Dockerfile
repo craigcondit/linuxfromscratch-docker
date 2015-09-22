@@ -66,4 +66,15 @@ RUN \
 	cd /sources && \
 	rm -rf linux-4.1.6
 
+# man-pages
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf man-pages-4.02.tar.xz && \
+	cd man-pages-4.02 && \
+	make install && \
+	cd /sources && \
+	rm -rf man-pages-4.02
+	
 CMD ["/bin/bash"]
