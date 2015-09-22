@@ -400,4 +400,20 @@ RUN \
 	cd /sources && \
 	rm -rf acl-2.2.52
 
+# libcap
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf libcap-2.24.tar.xz && \
+	cd libcap-2.24 && \
+	sed -i '/install.*STALIBNAME/d' libcap/Makefile && \
+	MAKE="make -j4" make && \
+	make RAISE_SETFCAP=no prefix=/usr install && \
+	chmod -v 755 /usr/lib/libcap.so && \
+	mv -v /usr/lib/libcap.so.* /lib && \
+	ln -sfv ../../lib/$(readlink /usr/lib/libcap.so) /usr/lib/libcap.so && \
+	cd /sources && \
+	rm -rf libcap-2.24
+
 CMD ["/bin/bash"]
