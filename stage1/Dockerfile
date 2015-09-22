@@ -1011,6 +1011,25 @@ RUN \
 	systemd-machine-id-setup && \
 	cd /sources && \
 	rm -rf systemd-224
-	
+
+# dbus
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf dbus-1.8.20.tar.gz && \
+	cd dbus-1.8.20 && \
+	./configure \
+		--prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+		--docdir=/usr/share/doc/dbus-1.8.20 --disable-static \
+		--with-console-auth-dir=/run/console && \
+	MAKE="make -j4" make && \
+	make install && \
+	mv -v /usr/lib/libdbus-1.so.* /lib && \
+	ln -sfv ../../lib/$(readlink /usr/lib/libdbus-1.so) /usr/lib/libdbus-1.so && \
+	ln -sfv /etc/machine-id /var/lib/dbus && \
+	cd /sources && \
+	rm -rf dbus-1.8.20
+
 CMD ["/bin/bash"]
 
