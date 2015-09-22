@@ -1067,5 +1067,22 @@ RUN \
 	cd /sources && \
 	rm -rf man-db-2.7.2
 
+# tar
+ADD patches/tar-1.28-inode-fix.patch /sources/tar-1.28-inode-fix.patch
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf tar-1.28.tar.xz && \
+	cd tar-1.28 && \
+	patch -p1 < ../tar-1.28-inode-fix.patch && \
+	FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr --bindir=/bin && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	make -C doc install-html docdir=/usr/share/doc/tar-1.28 && \
+	cd /sources && \
+	rm -rf tar-1.28
+
 CMD ["/bin/bash"]
 
