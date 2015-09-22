@@ -743,5 +743,19 @@ RUN \
 	cd /sources && \
 	rm -rf perl-5.22.0
 
+# XML-Parser
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf XML-Parser-2.44.tar.gz && \
+	cd XML-Parser-2.44 && \
+	perl Makefile.PL && \
+	MAKE="make -j4" make && \
+	make test && \
+	make install && \
+	cd /sources && \
+	rm -rf XML-Parser-2.44
+
 CMD ["/bin/bash"]
 
