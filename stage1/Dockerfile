@@ -813,5 +813,21 @@ RUN \
 	cd /sources && \
 	rm -rf gawk-4.1.3
 
+# findutils
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf findutils-4.4.2.tar.gz && \
+	cd findutils-4.4.2 && \
+	./configure --prefix=/usr --localstatedir=/var/lib/locate && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	mv -v /usr/bin/find /bin && \
+	sed -i 's|find:=${BINDIR}|find:=/bin|' /usr/bin/updatedb && \
+	cd /sources && \
+	rm -rf findutils-4.4.2
+
 CMD ["/bin/bash"]
 
