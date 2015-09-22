@@ -161,4 +161,20 @@ RUN \
 	grep found dummy.log && \
 	rm -v dummy.c a.out dummy.log
 
+# zlib
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf zlib-1.2.8.tar.xz && \
+	cd zlib-1.2.8 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	mv -v /usr/lib/libz.so.* /lib && \
+	ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so && \
+	cd /sources && \
+	rm -rf zlib-1.2.8
+
 CMD ["/bin/bash"]
