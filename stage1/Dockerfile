@@ -316,4 +316,19 @@ RUN \
 	cd /sources && \
 	rm -rf bzip2-1.0.6
 
+# pkg-config
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf pkg-config-0.28.tar.gz && \
+	cd pkg-config-0.28 && \
+	./configure \
+		--prefix=/usr --with-internal-glib --disable-host-tool --docdir=/usr/share/doc/pkg-config-0.28 && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf pkg-config-0.28
+
 CMD ["/bin/bash"]
