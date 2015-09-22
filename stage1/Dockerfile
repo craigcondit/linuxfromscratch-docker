@@ -207,4 +207,22 @@ RUN \
 	cd /sources && \
 	rm -rf binuitls-2.25.1 binutils-build
 
+# gmp
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf gmp-6.0.0a.tar.xz && \
+	cd gmp-6.0.0 && \
+	./configure \
+		--prefix=/usr --enable-cxx --disable-static --docdir=/usr/share/doc/gmp-6.0.0a && \
+	MAKE="make -j4" make && \
+	make html && \
+	make check 2>&1 | tee gmp-check-log && \
+	awk '/tests passed/{total+=$2} ; END{print total}' gmp-check-log && \
+	make install && \
+	make install-html && \
+	cd /sources && \
+	rm -rf gmp-6.0.0
+
 CMD ["/bin/bash"]
