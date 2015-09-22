@@ -709,5 +709,23 @@ RUN \
 	cd /sources && \
 	rm -rf expat-2.1.0
 
+# inetutils
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf inetutils-1.9.4.tar.xz && \
+	cd inetutils-1.9.4 && \
+	./configure \
+		--prefix=/usr --localstatedir=/var --disable-logger --disable-whois \
+		--disable-rcp --disable-rexec --disable-rlogin --disable-rsh \
+		--disable-servers && \
+	MAKE="make -j4" make && \
+	make install && \
+	mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin && \
+	mv -v /usr/bin/ifconfig /sbin && \
+	cd /sources && \
+	rm -rf inetutils-1.9.4
+
 CMD ["/bin/bash"]
 
