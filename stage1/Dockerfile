@@ -556,5 +556,18 @@ RUN \
 	cd /sources && \
 	rm -rf iana-etc-2.30
 
+# m4
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+	tar xf m4-1.4.17.tar.xz && \
+	cd m4-1.4.17 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf m4-1.4.17
+
 CMD ["/bin/bash"]
 
