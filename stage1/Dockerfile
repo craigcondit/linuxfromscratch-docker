@@ -633,5 +633,23 @@ RUN \
 	cd /sources && \
 	rm -rf readline-6.3
 
+# bash
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf bash-4.3.30.tar.gz && \
+	cd bash-4.3.30 && \
+	patch -Np1 -i ../bash-4.3.30-upstream_fixes-2.patch && \
+	./configure \
+		--prefix=/usr --bindir=/bin --docdir=/usr/share/doc/bash-4.3.30 \
+		--without-bash-malloc --with-installed-readline && \
+	MAKE="make -j4" make && \
+	chown -Rv nobody . && \
+	su nobody -s /bin/bash -c "PATH=$PATH make tests" && \
+	make install && \
+	cd /sources && \
+	rm -rf bash-4.3.30
+
 CMD ["/bin/bash"]
 
