@@ -585,5 +585,19 @@ RUN \
 	cd /sources && \
 	rm -rf flex-2.5.39
 
+# bison
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+	tar xf bison-3.0.4.tar.xz && \
+	cd bison-3.0.4 && \
+	./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.0.4 && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf bison-3.0.4
+
 CMD ["/bin/bash"]
 
