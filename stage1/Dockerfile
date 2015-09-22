@@ -1009,8 +1009,6 @@ RUN \
 	ln -sfv ../lib/systemd/systemd /sbin/init && \
 	sed -i "s:0775 root lock:0755 root root:g" /usr/lib/tmpfiles.d/legacy.conf && \
 	systemd-machine-id-setup && \
-	sed -i "s:minix:ext4:g" src/test/test-path-util.c && \
-	make LD_LIBRARY_PATH=/tools/lib -k check && \
 	cd /sources && \
 	rm -rf systemd-224
 	
