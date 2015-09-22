@@ -873,5 +873,18 @@ RUN \
 	cd /sources && \
 	rm -rf gperf-3.0.4
 
+# groff
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf groff-1.22.3.tar.gz && \
+	cd groff-1.22.3 && \
+	PAGE=letter ./configure --prefix=/usr && \
+	MAKE="make -j1" make && \
+	make install && \
+	cd /sources && \
+	rm -rf groff-1.22.3
+
 CMD ["/bin/bash"]
 
