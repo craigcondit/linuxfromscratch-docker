@@ -959,5 +959,19 @@ RUN \
 	cd /sources && \
 	rm -rf make-4.1
 
+# patch
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf patch-2.7.5.tar.xz && \
+	cd patch-2.7.5 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf patch-2.7.5
+
 CMD ["/bin/bash"]
 
