@@ -177,4 +177,18 @@ RUN \
 	cd /sources && \
 	rm -rf zlib-1.2.8
 
+# file
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf file-5.24.tar.gz && \
+	cd file-5.24 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf file-5.24
+
 CMD ["/bin/bash"]
