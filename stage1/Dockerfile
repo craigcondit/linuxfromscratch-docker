@@ -693,5 +693,21 @@ RUN \
 	cd /sources && \
 	rm -rf gdbm-1.11
 
+# expat
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf expat-2.1.0.tar.gz && \
+	cd expat-2.1.0 && \
+	./configure --prefix=/usr --disable-static && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	install -v -dm755 /usr/share/doc/expat-2.1.0 && \
+	install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.1.0 && \
+	cd /sources && \
+	rm -rf expat-2.1.0
+
 CMD ["/bin/bash"]
 
