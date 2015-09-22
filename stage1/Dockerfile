@@ -544,5 +544,17 @@ RUN \
 	cd /sources && \
 	rm -rf coreutils-8.24
 
+# iana-etc
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf iana-etc-2.30.tar.bz2 && \
+	cd iana-etc-2.30 && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf iana-etc-2.30
+
 CMD ["/bin/bash"]
 
