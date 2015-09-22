@@ -362,4 +362,22 @@ RUN \
 	cd /sources && \
 	rm -rf ncurses-6.0
 
+# attr
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf attr-2.4.47.src.tar.gz && \
+	cd attr-2.4.47 && \
+	sed -i -e 's|/@pkg_name@|&-@pkg_version@|' include/builddefs.in && \
+	sed -i -e "/SUBDIRS/s|man2||" man/Makefile && \
+	./configure --prefix=/usr --disable-static && \
+	MAKE="make -j4" make && \
+	make install install-dev install-lib && \
+	chmod -v 755 /usr/lib/libattr.so && \
+	mv -v /usr/lib/libattr.so.* /lib && \
+	ln -sfv ../../lib/$(readlink /usr/lib/libattr.so) /usr/lib/libattr.so && \
+	cd /sources && \
+	rm -rf attr-2.4.47
+
 CMD ["/bin/bash"]
