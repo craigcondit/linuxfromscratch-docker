@@ -946,5 +946,18 @@ RUN \
 	cd /sources && \
 	rm -rf libpipeline-1.4.1
 
+# make
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf make-4.1.tar.bz2 && \
+	cd make-4.1 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf make-4.1
+
 CMD ["/bin/bash"]
 
