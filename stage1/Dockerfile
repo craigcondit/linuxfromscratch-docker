@@ -324,7 +324,8 @@ RUN \
 	tar xf pkg-config-0.28.tar.gz && \
 	cd pkg-config-0.28 && \
 	./configure \
-		--prefix=/usr --with-internal-glib --disable-host-tool --docdir=/usr/share/doc/pkg-config-0.28 && \
+		--prefix=/usr --with-internal-glib --disable-host-tool \
+		--docdir=/usr/share/doc/pkg-config-0.28 && \
 	MAKE="make -j4" make && \
 	make check && \
 	make install && \
@@ -356,7 +357,9 @@ RUN \
 	mkdir -v /usr/share/doc/ncurses-6.0 && \
 	cp -v -R doc/* /usr/share/doc/ncurses-6.0 && \
 	make distclean && \
-	./configure --prefix=/usr --with-shared --without-normal --without-debug --without-cxx-binding && \
+	./configure \
+		--prefix=/usr --with-shared --without-normal \
+		--without-debug --without-cxx-binding && \
 	make sources libs && \
 	cp -av lib/lib*.so.6* /usr/lib && \
 	cd /sources && \
@@ -477,8 +480,8 @@ RUN \
 	tar xf procps-ng-3.3.11.tar.xz && \
 	cd  procps-ng-3.3.11 && \
 	./configure \
-		--prefix=/usr --exec-prefix= --libdir=/usr/lib --docdir=/usr/share/doc/procps-ng-3.3.11 \
-		--disable-static --disable-kill && \
+		--prefix=/usr --exec-prefix= --libdir=/usr/lib \
+		--docdir=/usr/share/doc/procps-ng-3.3.11 --disable-static --disable-kill && \
 	MAKE="make -j4" make && \
 	sed -i -r 's|(pmap_initname)\\\$|\1|' testsuite/pmap.test/pmap.exp && \
 	make check && \
@@ -502,8 +505,8 @@ RUN \
 	cd build && \
 	LIBS=-L/tools/lib CFLAGS=-I/tools/include PKG_CONFIG_PATH=/tools/lib/pkgconfig \
 	../configure \
-		--prefix=/usr --bindir=/bin --with-root-prefix="" --enable-elf-shlibs --disable-libblkid \
-		--disable-libuuid --disable-uuidd --disable-fsck && \
+		--prefix=/usr --bindir=/bin --with-root-prefix="" --enable-elf-shlibs \
+		--disable-libblkid --disable-libuuid --disable-uuidd --disable-fsck && \
 	MAKE="make -j4" make && \
 	ln -sfv /tools/lib/lib{blk,uu}id.so.1 lib && \
 	make LD_LIBRARY_PATH=/tools/lib check && \
@@ -517,6 +520,29 @@ RUN \
 	install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info && \
 	cd /sources && \
 	rm -rf e2fsprogs-1.42.13
+
+# coreutils
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf coreutils-8.24.tar.xz && \
+	cd coreutils-8.24 && \
+	patch -Np1 -i ../coreutils-8.24-i18n-1.patch && \
+	sed -i '/tests\/misc\/sort.pl/ d' Makefile.in && \
+	FORCE_UNSAFE_CONFIGURE=1 ./configure \
+		--prefix=/usr --enable-no-install-program=kill,uptime && \
+	MAKE="make -j4" make && \
+	make install && \
+	mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin && \
+	mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin && \
+	mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin && \
+	mv -v /usr/bin/chroot /usr/sbin && \
+	mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8 && \
+	sed -i s/\"1\"/\"8\"/1 /usr/share/man/man8/chroot.8 && \
+	mv -v /usr/bin/{head,sleep,nice,test,[} /bin && \
+	cd /sources && \
+	rm -rf coreutils-8.24
 
 CMD ["/bin/bash"]
 
