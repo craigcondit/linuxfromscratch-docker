@@ -798,5 +798,20 @@ RUN \
 	cd /sources && \
 	rm -rf diffutils-3.3
 
+# gawk
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf gawk-4.1.3.tar.xz && \
+	cd gawk-4.1.3 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	mkdir -v /usr/share/doc/gawk-4.1.3 && \
+	cp -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-4.1.3 && \
+	cd /sources && \
+	rm -rf gawk-4.1.3
+
 CMD ["/bin/bash"]
 
