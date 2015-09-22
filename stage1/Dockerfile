@@ -757,5 +757,18 @@ RUN \
 	cd /sources && \
 	rm -rf XML-Parser-2.44
 
+# autoconf
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf autoconf-2.69.tar.xz && \
+	cd autoconf-2.69 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	cd /sources && \
+	rm -rf autoconf-2.69
+
 CMD ["/bin/bash"]
 
