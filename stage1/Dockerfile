@@ -859,5 +859,19 @@ RUN \
 	cd /sources && \
 	rm -rf intltool-0.51.0
 
+# gperf
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf gperf-3.0.4.tar.gz && \
+	cd gperf-3.0.4 && \
+	./configure --prefix=/usr --docdir=/usr/share/doc/gperf-3.0.4 && \
+	MAKE="make -j4" make && \
+	make -j1 check && \
+	make install && \
+	cd /sources && \
+	rm -rf gperf-3.0.4
+
 CMD ["/bin/bash"]
 
