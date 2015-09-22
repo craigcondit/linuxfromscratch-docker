@@ -829,5 +829,19 @@ RUN \
 	cd /sources && \
 	rm -rf findutils-4.4.2
 
+# gettext
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf gettext-0.19.5.1.tar.xz && \
+	cd gettext-0.19.5.1 && \
+	./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/gettext-0.19.5.1 && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf gettext-0.19.5.1
+
 CMD ["/bin/bash"]
 
