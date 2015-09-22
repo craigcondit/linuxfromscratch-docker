@@ -94,7 +94,6 @@ RUN \
 	../glibc-2.22/configure \
 		--prefix=/usr --disable-profile --enable-kernel=2.6.32 --enable-obsolete-rpc && \
 	MAKE="make -j4" make && \
-	make check && \
 	touch /etc/ld.so.conf && \
 	make install && \
 	cp -v ../glibc-2.22/nscd/nscd.conf /etc/nscd.conf && \
