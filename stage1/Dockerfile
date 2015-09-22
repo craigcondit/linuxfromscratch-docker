@@ -932,5 +932,19 @@ RUN \
 	cd /sources && \
 	rm -rf gzip-1.6
 
+# libpipeline
+RUN \
+        umask 022 && \
+        export LC_ALL=POSIX && \
+        cd /sources && \
+        tar xf libpipeline-1.4.1.tar.gz && \
+	cd libpipeline-1.4.1 && \
+	PKG_CONFIG_PATH=/tools/lib/pkgconfig ./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make check && \
+	make install && \
+	cd /sources && \
+	rm -rf libpipeline-1.4.1
+
 CMD ["/bin/bash"]
 
