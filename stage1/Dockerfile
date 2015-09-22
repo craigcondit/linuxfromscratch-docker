@@ -454,4 +454,19 @@ RUN \
 	cd /sources && \
 	rm -rf shadow-4.2.1
 
+# psmisc
+RUN \
+	umask 022 && \
+	export LC_ALL=POSIX && \
+	cd /sources && \
+	tar xf psmisc-22.21.tar.gz && \
+	cd psmisc-22.21 && \
+	./configure --prefix=/usr && \
+	MAKE="make -j4" make && \
+	make install && \
+	mv -v /usr/bin/fuser /bin && \
+	mv -v /usr/bin/killall /bin && \
+	cd /sources && \
+	rm -rf psmisc-22.21
+
 CMD ["/bin/bash"]
